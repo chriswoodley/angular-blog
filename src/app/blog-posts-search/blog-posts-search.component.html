@@ -1,0 +1,38 @@
+<form
+  #searchForm="ngForm"
+  (ngSubmit)="onSubmit()"
+>
+  <div class="mb-5">
+    <label
+      for="searchText"
+      class="font-bold"
+    >
+      Search
+    </label>
+    <input
+      type="search"
+      name="searchText"
+      id="searchText"
+      placeholder="Search posts..."
+      [(ngModel)]="blogSearchModel.searchText"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="
+      inline-block
+      p-2
+      rounded
+      bg-blue-800
+      text-white
+      text-center
+      hover:bg-blue-700
+      active:bg-blue-900
+      shadow-md
+      active:shadow-none
+    "
+  >
+    Submit
+  </button>
+</form>

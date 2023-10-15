@@ -44,4 +44,14 @@ export class BlogService {
 
     return response;
   }
+
+  searchPosts(searchText: string): Observable<PostsResponse> {
+    const response = this.http.get<PostsResponse>(`https://dummyjson.com/posts/search?q=${searchText}`)
+      .pipe(
+        tap(_ => console.log('searched posts')),
+        catchError(this.handleError<PostsResponse>(`searchPosts q=${searchText}`))
+      );
+
+    return response;
+  }
 }
