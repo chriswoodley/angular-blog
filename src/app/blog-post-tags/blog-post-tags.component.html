@@ -1,0 +1,39 @@
+<ng-container *ngIf="isFilter">
+  <a
+    *ngFor="let tag of tags"
+    [routerLink]="['/']"
+    [queryParams]="{tag}"
+    class="
+      inline-block
+      px-2
+      py-1
+      text-sm
+      bg-slate-100
+      text-slate-500
+      text-center
+      font-bold
+      rounded
+    "
+    >
+      {{tag}}
+  </a>
+</ng-container>
+
+<ng-container *ngIf="!isFilter">
+  <span
+    *ngFor="let tag of tags"
+    class="
+      inline-block
+      px-2
+      py-1
+      text-sm
+      bg-slate-100
+      text-slate-500
+      text-center
+      font-bold
+      rounded
+    "
+  >
+    {{tag}}
+  </span>
+</ng-container>
