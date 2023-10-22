@@ -5,15 +5,21 @@
   <div class="mb-5">
     <label
       for="searchText"
-      class="font-bold"
+      class="
+        font-bold
+        block
+      "
     >
-      Search
+      Search Post Text
     </label>
     <input
+      class="
+        w-full
+        max-w-[200px]
+      "
       type="search"
       name="searchText"
       id="searchText"
-      placeholder="Search posts..."
       [(ngModel)]="blogSearchModel.searchText"
     />
   </div>

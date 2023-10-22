@@ -1,15 +1,23 @@
 <div class="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-  <app-blog-post
-    *ngFor="let post of posts"
-    [post]="post"
-    class="
-      flex p-5
-      bg-white
-      rounded
-      shadow-md
-      flex-col
-      justify-between
-    "
-  >
-  </app-blog-post>
+  <ng-container *ngIf="!!posts.length">
+    <app-blog-post
+      *ngFor="let post of posts"
+      [post]="post"
+      class="
+        flex
+        p-5
+        bg-white
+        rounded
+        shadow-md
+        flex-col
+        justify-between
+      "
+    />
+  </ng-container>
+
+  <ng-container *ngIf="!posts.length">
+    <div>
+      <p>There are no posts to display.</p>
+    </div>
+  </ng-container>
 </div>

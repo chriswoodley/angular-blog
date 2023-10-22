@@ -1,4 +1,4 @@
-<ng-container *ngIf="isFilter">
+<ng-container *ngIf="isFilter && !!tags.length">
   <a
     *ngFor="let tag of tags"
     [routerLink]="['/']"
@@ -19,7 +19,7 @@
   </a>
 </ng-container>
 
-<ng-container *ngIf="!isFilter">
+<ng-container *ngIf="!isFilter && !!tags.length">
   <span
     *ngFor="let tag of tags"
     class="

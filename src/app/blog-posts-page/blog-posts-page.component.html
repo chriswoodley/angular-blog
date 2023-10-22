@@ -10,17 +10,18 @@
     </a>
   </h2>
 
-  <div class="grid grid-cols-12 gap-5">
+  <div class="grid grid-cols-3 gap-5">
     <app-blog-posts
       [posts]="filteredPosts"
       class="
         block
-        col-span-9
+        col-span-2
       "
     />
 
-    <div class="col-span-3">
+    <div class="col-span-1">
       <div
+        *ngIf="!!allTags.length"
         class="
           mb-5
         "
