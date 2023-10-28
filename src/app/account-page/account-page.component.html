@@ -1,1 +1,170 @@
-<p>account-page works!</p>
+<h2
+  class="
+    text-3xl
+    mb-5
+  "
+>
+  Account
+</h2>
+
+
+
+<div
+  class="
+  w-1/2
+  "
+>
+  <div
+  *ngIf="(queryParams$ | async)?.['id'] as newUserId"
+  class="
+      px-3
+      py-2
+      mb-5
+      border
+      rounded
+      bg-green-100
+      border-green-500
+      text-green-900
+      shadow-md
+    "
+  >
+    User: {{newUserId}}, You have successfully created your account!
+    Please Login.
+  </div>
+
+  <div
+    *ngIf="loggedOut$ | async"
+    class="
+      px-3
+      py-2
+      mb-5
+      bg-blue-100
+      border
+      rounded
+      border-blue-500
+      text-blue-900
+      shadow-md
+    "
+  >
+    You have been logged out!
+  </div>
+
+  <div
+    *ngIf="(queryParams$ | async)?.['loginHasFailed']"
+    class="
+      px-3
+      py-2
+      mb-5
+      bg-red-100
+      border
+      rounded
+      border-red-500
+      text-red-900
+      shadow-md
+    "
+  >
+    Failed to login! Please try again.
+  </div>
+
+  <form
+    *ngIf="!authService.authUser; else logoutBtn;"
+    #loginForm="ngForm"
+    (ngSubmit)="login()"
+    class="
+      grid
+      grid-cols-2
+      gap-5
+    "
+  >
+    <div class="mb-5">
+      <label
+        for="username"
+        class="
+          font-bold
+          block
+        "
+      >
+        Username
+      </label>
+
+      <input
+        class="
+          w-full
+        "
+        type="text"
+        name="username"
+        id="username"
+        [(ngModel)]="credentialModel.username"
+      />
+    </div>
+
+    <div class="mb-5">
+      <label
+        for="password"
+        class="
+          font-bold
+          block
+        "
+      >
+        Password
+      </label>
+
+      <input
+        class="
+          w-full
+        "
+        type="password"
+        name="password"
+        id="password"
+        [(ngModel)]="credentialModel.password"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="
+        w-full
+        block
+        px-3
+        py-2
+        mb-5
+        rounded
+        bg-blue-800
+        text-white
+        text-center
+        hover:bg-blue-700
+        active:bg-blue-900
+        shadow-md
+        active:shadow-none
+      "
+    >
+      Login
+    </button>
+
+    <p
+      class="
+      "
+    >
+      Or,
+      <a
+        [routerLink]="['/account/new']"
+        class="
+          underline
+        "
+      >Register here</a>.
+    </p>
+  </form>
+
+  <ng-template #logoutBtn>
+    <button
+      (click)="logout()"
+    >
+      Logout
+    </button>
+
+  </ng-template>
+</div>
+
+
+
+
