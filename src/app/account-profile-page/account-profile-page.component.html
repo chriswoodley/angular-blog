@@ -21,7 +21,7 @@
       "
     >
       <a
-        [routerLink]="['/']"
+        [routerLink]="['/account/posts']"
         class="
           block
           py-2
@@ -104,6 +104,7 @@
           text-left
           hover:bg-slate-100
         "
+        (click)="logout()"
       >
         Logout
       </button>

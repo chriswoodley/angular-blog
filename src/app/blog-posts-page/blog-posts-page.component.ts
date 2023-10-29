@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BlogService } from '../blog.service'
 import { Post } from '../post';
@@ -21,9 +21,9 @@ import { BlogPostsSearchComponent } from '../blog-posts-search/blog-posts-search
   templateUrl: './blog-posts-page.component.html',
   styleUrls: ['./blog-posts-page.component.css']
 })
-export class BlogPostsPageComponent {
-  private route = inject(ActivatedRoute);
-  private blogService = inject(BlogService);
+export class BlogPostsPageComponent implements OnInit {
+  protected route = inject(ActivatedRoute);
+  protected blogService = inject(BlogService);
 
   posts: Post[] = [];
   filteredPosts: Post[] = [];
@@ -33,7 +33,10 @@ export class BlogPostsPageComponent {
 
   ngOnInit(): void {
     this.fetchPosts();
+    this.filterByTag();
+  }
 
+  protected filterByTag() {
     this.route.queryParams
       .subscribe(({tag}) => {
         if (tag) {
@@ -49,11 +52,7 @@ export class BlogPostsPageComponent {
     );
   }
 
-  search(e: string) {
-    this.searchPosts(e);
-  }
-
-  private fetchPosts() {
+  protected fetchPosts() {
     this.blogService.getPosts()
       .subscribe((data) => {
         this.posts = data?.posts || [];
@@ -62,15 +61,19 @@ export class BlogPostsPageComponent {
       })
   }
 
-  private searchPosts(searchText: string) {
-    this.blogService.searchPosts(searchText)
-      .subscribe((data) => {
-        if (searchText) {
-          this.headingText = `Posts searched with: ${searchText}`
-        } else {
-          this.headingText = "All posts"
-        }
-        this.filteredPosts = data?.posts || [];
-      })
+  protected searchPosts(searchText: string) {
+    if (searchText.trim()) {
+      this.blogService.searchPosts(searchText)
+        .subscribe((data) => {
+          if (searchText) {
+            this.headingText = `Posts searched with: ${searchText}`
+          } else {
+            this.headingText = "All posts"
+          }
+          this.filteredPosts = data?.posts || [];
+        })
+    } else {
+      this.fetchPosts();
+    }
   }
 }

@@ -19,6 +19,13 @@ export class BlogPostComponent {
   @Input()
   post!: Post|undefined;
 
-  route: ActivatedRoute = inject(ActivatedRoute);
+  @Input()
+  path: string = '/posts';
+
+  @Input()
+  editable: boolean = false;
+
+  private route: ActivatedRoute = inject(ActivatedRoute);
+
   showFullPost: boolean = !!this.route.snapshot.params['id']
 }

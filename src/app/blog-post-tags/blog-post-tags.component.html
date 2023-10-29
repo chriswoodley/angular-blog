@@ -1,7 +1,7 @@
 <ng-container *ngIf="isFilter && !!tags.length">
   <a
     *ngFor="let tag of tags"
-    [routerLink]="['/']"
+    [routerLink]="[path]"
     [queryParams]="{tag}"
     class="
       inline-block

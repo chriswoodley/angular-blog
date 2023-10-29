@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./blog-post-page.component.css']
 })
 export class BlogPostPageComponent {
-  private router: Router = inject(Router);
-  private route: ActivatedRoute = inject(ActivatedRoute);
-  private blogService = inject(BlogService);
+  protected router: Router = inject(Router);
+  protected route: ActivatedRoute = inject(ActivatedRoute);
+  protected blogService = inject(BlogService);
 
   postId: number = -1;
   post: Post | undefined;
@@ -33,7 +33,7 @@ export class BlogPostPageComponent {
     }
   }
 
-  private fetchPost() {
+  protected fetchPost() {
     this.blogService.getPost(this.postId)
       .subscribe((post) => {
         if (!post) {

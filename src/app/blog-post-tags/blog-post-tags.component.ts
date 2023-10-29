@@ -19,4 +19,7 @@ export class BlogPostTagsComponent {
 
   @Input()
   isFilter: boolean = false;
+
+  @Input()
+  path: string = '/';
 }

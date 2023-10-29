@@ -19,20 +19,21 @@ import { Observable, Subject, takeUntil } from 'rxjs';
   styleUrls: ['./account-page.component.css']
 })
 export class AccountPageComponent implements OnDestroy, OnInit {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private destroy$: Subject<boolean> = new Subject();
+
   authService = inject(AuthService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
   credentialModel: CredentialModel = new CredentialModel();
-  loggedOut$!: Observable<boolean>;
-  destroy$: Subject<boolean> = new Subject();
   queryParams$!: Observable<Params>;
 
   ngOnInit(): void {
     this.queryParams$ = this.route.queryParams;
-  }
+    const authUser = this.authService.authUser;
 
-  logout() {
-    this.loggedOut$ = this.authService.logout();
+    if (!!authUser) {
+      this.router.navigate(['/account/profile']);
+    }
   }
 
   login() {

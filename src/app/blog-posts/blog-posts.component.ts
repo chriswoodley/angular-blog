@@ -15,5 +15,8 @@ import { Post } from '../post';
 })
 export class BlogPostsComponent {
   @Input()
-  posts: Post[] = []
+  posts: Post[] = [];
+
+  @Input()
+  path: string = '/posts';
 }

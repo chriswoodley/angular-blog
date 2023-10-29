@@ -35,6 +35,17 @@ export class BlogService {
     return response;
   }
 
+  getPostsByUser(id: number): Observable<PostsResponse> {
+    const response = this.http.get<PostsResponse>(
+      `https://dummyjson.com/posts/user/${id}`
+    ).pipe(
+      tap(_ => console.log('fetched posts by user')),
+      catchError(this.handleError<PostsResponse>(`getPostsByUser: ${id}`))
+    );
+
+    return response;
+  }
+
   getPost(id: number): Observable<Post|undefined> {
     const response = this.http.get<Post>(`https://dummyjson.com/posts/${id}`)
       .pipe(
@@ -46,10 +57,10 @@ export class BlogService {
   }
 
   searchPosts(searchText: string): Observable<PostsResponse> {
-    const response = this.http.get<PostsResponse>(`https://dummyjson.com/posts/search?q=${searchText}`)
+    const response = this.http.get<PostsResponse>(`https://dummyjson.com/posts/search?q=${searchText.trim()}`)
       .pipe(
         tap(_ => console.log('searched posts')),
-        catchError(this.handleError<PostsResponse>(`searchPosts q=${searchText}`))
+        catchError(this.handleError<PostsResponse>(`searchPosts q=${searchText.trim()}`))
       );
 
     return response;

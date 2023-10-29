@@ -7,12 +7,19 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { AccountProfilePageComponent } from './account-profile-page/account-profile-page.component';
 import { authGuard } from './auth.guard';
 import { NewAccountPageComponent } from './new-account-page/new-account-page.component';
+import { AccountBlogPostsPageComponent } from './account-blog-posts-page/account-blog-posts-page.component';
+import { AccountBlogPostPageComponent } from './account-blog-post-page/account-blog-post-page.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: BlogPostsPageComponent,
     title: 'Blog Posts Page'
+  },
+  {
+    path: 'posts',
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'posts/create',
@@ -38,6 +45,18 @@ export const routes: Routes = [
     path: 'account/profile',
     component: AccountProfilePageComponent,
     title: 'Account Profile Page',
+    canActivate: [authGuard]
+  },
+  {
+    path: 'account/posts',
+    component: AccountBlogPostsPageComponent,
+    title: 'Account Blog Posts Page',
+    canActivate: [authGuard]
+  },
+  {
+    path: 'account/posts/:id',
+    component: AccountBlogPostPageComponent,
+    title: 'Account Blog Post Page',
     canActivate: [authGuard]
   },
   {

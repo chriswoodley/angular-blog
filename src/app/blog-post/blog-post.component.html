@@ -26,12 +26,13 @@
           {{post.body}}
         </div>
 
-        <footer class="flex justify-between items-center mt-5">
+        <footer class="flex gap-2 items-center mt-5">
           <a
-            [routerLink]="['/']"
+            [routerLink]="[path]"
             class="
               inline-block
-              p-2
+              py-2
+              px-3
               rounded
               bg-blue-800
               text-white
@@ -43,6 +44,50 @@
             "
           >
             Back
+          </a>
+
+          <a
+            *ngIf="editable"
+            [routerLink]="[path, post.id, 'edit']"
+            class="
+              inline-block
+              py-2
+              px-3
+              border-[1px]
+              rounded
+              text-center
+              border-slate-300
+              text-slate-700
+              bg-slate-200
+              hover:bg-slate-300
+              active:bg-slate-400
+              shadow-md
+              active:shadow-none
+            "
+          >
+            Edit
+          </a>
+
+          <a
+            *ngIf="editable"
+            [routerLink]="[path, post.id, 'edit']"
+            class="
+              inline-block
+              py-2
+              px-3
+              border-[1px]
+              border-red-700
+              rounded
+              text-center
+              text-white
+              bg-red-700
+              hover:bg-red-800
+              active:bg-red-300
+              shadow-md
+              active:shadow-none
+            "
+          >
+            Delete
           </a>
         </footer>
     </div>
@@ -67,9 +112,7 @@
         flex-wrap
         gap-2
       "
-    >
-
-    </app-blog-post-tags>
+    />
   </header>
 
   <footer class="flex justify-between items-center mt-5">
@@ -89,10 +132,11 @@
     </div>
 
     <a
-      [routerLink]="['/posts', post.id]"
+      [routerLink]="[path, post.id]"
       class="
         inline-block
-        p-2
+        py-2
+        px-3
         rounded
         bg-blue-800
         text-white
@@ -105,7 +149,4 @@
       View Post
     </a>
   </footer>
-
-
-
 </ng-container>
