@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth.service';
-import { User } from '../user';
-import { UserService } from '../user.service';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Subject, combineLatest, takeUntil, tap } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { logout } from '../actions/auth.actions';
+import { AppState, selectAuthStatus, selectAuthUser } from '../selectors/auth.selector';
 
 @Component({
   selector: 'app-account-profile-page',
@@ -17,20 +17,31 @@ import { Router, RouterModule } from '@angular/router';
   styleUrls: ['./account-profile-page.component.css']
 })
 export class AccountProfilePageComponent implements OnInit, OnDestroy {
-  private authService: AuthService = inject(AuthService);
-  private userService: UserService = inject(UserService);
   private router: Router = inject(Router);
   private destroyed$: Subject<boolean> = new Subject();
+  private store: Store<AppState> = inject(Store);
 
-  user$!: Observable<User|undefined>;
-  loggedOut$!: Observable<boolean>;
+  authUser$ = this.store.select(selectAuthUser);
+  authStatus$ = this.store.select(selectAuthStatus);
 
   ngOnInit(): void {
-    const authUser = this.authService.authUser;
+    const logoutResult$ = combineLatest([
+      this.authUser$,
+      this.authStatus$
+    ]);
 
-    if (authUser?.id) {
-      this.user$ = this.userService.getUser(authUser.id);
-    }
+    logoutResult$.pipe(
+      takeUntil(this.destroyed$),
+      tap(([user, status]) => {
+        if (status !== 'loading' && !user) { // the user has logged out
+          this.router.navigate(['/account'], {
+            queryParams: {
+              hasLoggedOut: true
+            }
+          })
+        }
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
@@ -38,21 +49,6 @@ export class AccountProfilePageComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.loggedOut$ = this.authService.logout();
-
-    this.loggedOut$
-      .pipe(
-        takeUntil(this.destroyed$),
-        tap((hasLoggedOut) => {
-          if (hasLoggedOut) {
-            this.router.navigate(['/account'], {
-              queryParams: {
-                hasLoggedOut: true
-              }
-            })
-          }
-        })
-      )
-      .subscribe();
+    this.store.dispatch(logout());
   }
 }

@@ -6,5 +6,5 @@ export interface AuthUser {
   lastName: string,
   gender: string,
   image: string,
-  token?: string
+  token?: string | null
 }

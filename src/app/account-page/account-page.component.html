@@ -118,6 +118,7 @@
     </div>
 
     <button
+      [disabled]="(authStatus$ | async) === 'loading'"
       type="submit"
       class="
         w-full
@@ -135,7 +136,13 @@
         active:shadow-none
       "
     >
-      Login
+      <ng-container *ngIf="(authStatus$ | async) === 'loading'; else text;">
+        Logging In
+      </ng-container>
+
+      <ng-template #text>
+        Login
+      </ng-template>
     </button>
 
     <p

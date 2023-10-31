@@ -1,4 +1,4 @@
-<div *ngIf="(user$ | async) as user; else loading">
+<div *ngIf="(authUser$ | async) as user">
   <p
     class="
       mb-5
@@ -111,9 +111,3 @@
     </li>
   </ul>
 </div>
-
-<ng-template #loading>
-  <div>
-    loading...
-  </div>
-</ng-template>

@@ -4,7 +4,10 @@ import { ActivatedRoute, Params, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CredentialModel } from '../models/credential-model';
 import { FormsModule } from '@angular/forms';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, combineLatest, takeUntil, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { login, loginSuccess } from '../actions/auth.actions';
+import { selectAuthStatus, selectAuthUser } from '../selectors/auth.selector';
 
 
 @Component({
@@ -21,38 +24,52 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 export class AccountPageComponent implements OnDestroy, OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private store = inject(Store);
   private destroy$: Subject<boolean> = new Subject();
 
+  authUser$ = this.store.select(selectAuthUser);
+  authStatus$ = this.store.select(selectAuthStatus);
   authService = inject(AuthService);
   credentialModel: CredentialModel = new CredentialModel();
   queryParams$!: Observable<Params>;
 
   ngOnInit(): void {
     this.queryParams$ = this.route.queryParams;
-    const authUser = this.authService.authUser;
 
+    const loginResult$ = combineLatest([
+      this.authUser$,
+      this.authStatus$
+    ]);
+
+    loginResult$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap(([user, status]) => {
+          if (status === 'error') {
+            this.router.navigate(['/account'], {
+              queryParams: {
+                loginHasFailed: true
+              }
+            });
+          }
+
+          if (status === 'loaded' && user.token) {
+            localStorage.setItem('token', user.token);
+            this.router.navigate(['/account/profile']);
+          }
+        })
+      ).subscribe();
+
+      const authUser = this.authService.authUser;
+
+    // if we have the auth user token on page refresh. pass the user on...
     if (!!authUser) {
-      this.router.navigate(['/account/profile']);
+      this.store.dispatch(loginSuccess({user: authUser}));
     }
   }
 
   login() {
-    this.authService.login(this.credentialModel)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        if (data?.token) { // if we are not not already logged in
-          localStorage.setItem('token', data.token);
-          this.router.navigate(['/account/profile']);
-        } else if (data?.id) { // or we are already logged in
-          this.router.navigate(['/account/profile']);
-        } else { // login failed
-          this.router.navigate(['/account'], {
-            queryParams: {
-              loginHasFailed: true
-            }
-          });
-        }
-      });
+    this.store.dispatch(login({credentials: this.credentialModel}));
   }
 
   ngOnDestroy(): void {

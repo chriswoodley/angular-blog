@@ -30,11 +30,7 @@ export class AuthService {
     return of(!this.authUser);
   }
 
-  login(credentials: object): Observable<AuthUser|undefined> {
-    if (this.isLoggedIn()) {
-      return of(this.authUser);
-    }
-
+  login(credentials: object): Observable<AuthUser> {
     const body = JSON.stringify(credentials);
     const httpOptions = {
       headers: new HttpHeaders({
@@ -48,7 +44,7 @@ export class AuthService {
       httpOptions
     ).pipe(
       tap(_ => console.log('auth login')),
-      catchError(this.handleError<AuthUser|undefined>('auth/login'))
+      catchError(this.handleError<any>('auth/login'))
     );
 
     return response;
@@ -62,7 +58,7 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  get authUser(): AuthUser | undefined {
+  get authUser(): AuthUser|undefined {
     try {
       const token = this.getToken();
 
